@@ -5,6 +5,30 @@ body{
     font-family: 'Montserrat', sans-serif;
 }
 
+.button:hover{
+    text-decoration: none;
+    background-color: #c02e50;
+}
+
+.button{
+    background: #ff5e84;
+    width: 150px;
+    height: 40px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 60px 0;
+    color:white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius:60px 0;
+    box-shadow: 0px 8px 16px rgba(255, 0, 93, 0.5); 
+}
+
+body.hideScroll{
+    overflow: hidden;
+}
+
 a{
     color: #ff5e84;
     font-weight: bold;
@@ -30,7 +54,7 @@ p, .descroption{
 
 #intro{
     width: 300px;
-    margin-right: 20px;
+    margin-right: 60px;
 }
 
 main{
@@ -58,19 +82,6 @@ button{
 
 button:hover{
     text-decoration: underline;
-}
-
-button.fat:hover{
-    text-decoration: none;
-}
-
-button.fat{
-    background: #ff5e84;
-    width: 150px;
-    height: 40px;
-    border-radius: 60px 0;
-    color:white;
-    box-shadow: 0px 8px 16px rgba(255, 0, 93, 0.5); 
 }
 
 footer{
@@ -110,24 +121,25 @@ footer a{
     color: #777;
 }
 
-.idea .descroption {
+.idea .description{
     margin: 16px 0;
 }
 
 
 #modal{
     background-color: #a11a3a;
-    position: absolute;
+    position: fixed;
     top: 0;
-    width: 100vw;
-    min-height: 100vh;
+    bottom: 0;
+    right: 0;
+    left: 0;
     display: flex;
     justify-content: center;
     transition: 500ms;
 }
 
 #modal .content{
-    margin-top: auto;
+    margin-top:auto;
     color: #fff;
 }
 
@@ -143,6 +155,7 @@ footer a{
     display: grid;
     grid-template-columns:1fr 1fr;
     gap: 20px;
+    text-align: center;
 }
 
 .content form div:nth-child(3),
@@ -151,9 +164,13 @@ footer a{
     grid-column: span 2;
 }
 
+form textarea{
+    height: 150px;
+}
 
 form input,
 form textarea{
+    resize: none;
     width: 100%;
     padding: 12px;
     box-sizing: border-box;
@@ -213,4 +230,74 @@ form button:hover{
 #modal.hide{
     opacity: 0;
     visibility: hidden;
+}
+
+
+/* IDEIA.HTML*/
+#page-ideas #container{
+    display: block;
+}
+
+#page-ideas header{
+    display: flex;
+    justify-content: space-between;
+}
+
+#page-ideas nav {
+    display: flex;
+    align-items: center;
+}
+
+#page-ideas nav li{
+    margin-right: 16px;
+    list-style-type: none;
+}
+
+#page-ideas nav li a {
+    color: #25282b;
+}
+
+#page-ideas nav li:last-child{
+    margin: 0;
+}
+
+section#title{
+    text-align: center;  
+    margin: 32px 0;
+}
+
+section#title p {
+    opacity: 0.7;
+    margin: 0;
+}
+
+section#title h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+section#ideias{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap:10px;
+}
+
+
+#page-ideas nav li:last-child a{
+    color: white;
+}
+
+#page-ideas .idea img{
+   display: flex;
+   align-self: center;
+}
+
+section#ideias .content h3{
+    text-align: center;
+}
+
+section#title,
+section#ideas,
+footer{
+    margin-top: 64px;
 }
