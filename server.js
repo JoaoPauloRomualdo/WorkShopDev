@@ -2,66 +2,16 @@
 const express = require('express');
 const server = express();
 
+//EXPORTANDO O BANCO DE DADOS
+const db = require("./db");
 //cofigurar arquivos estaticos(css/js)
 server.use(express.static("public"));
 
+//HABILITAR USO DO REQ.BODY
+server.use(express.urlencoded({ extended: true }))
+
 // cofiguração do nunjucks
 const nunjucks = require('nunjucks');
-
-
-
-const ideas = [
-    {
-        img: "https://image.flaticon.com/icons/svg/2729/2729007.svg",
-        title: "Cursos de Programação",
-        category: "Estudo",
-        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit",
-        url: "https://rocketseat.com.br"
-    },
-
-    {
-        img: "https://image.flaticon.com/icons/svg/2729/2729005.svg",
-        title: "Exercicio",
-        category: "Saude",
-        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit",
-        url: "https://rocketseat.com.br"
-    },
-    
-    {
-        img: "https://image.flaticon.com/icons/svg/2729/2729027.svg",
-        title: "Meditação",
-        category: "Mentalidade",
-        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit",
-        url: "https://rocketseat.com.br"
-    },
-
-    {
-        img: "https://image.flaticon.com/icons/svg/2729/2729028.svg",
-        title: "Fazer Churrasco",
-        category: "Culinaria",
-        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit",
-        url: "https://rocketseat.com.br"
-    },
-
-    {
-        img: "https://image.flaticon.com/icons/svg/2729/2729021.svg",
-        title: "Jogar video Game",
-        category: "Entretenimento",
-        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit",
-        url: "https://rocketseat.com.br"
-    },
-
-    {
-        img: "https://image.flaticon.com/icons/svg/2232/2232483.svg",
-        title: "Ler um Livro",
-        category: "Educação",
-        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit",
-        url: "https://rocketseat.com.br"
-    },
-
-
-]
-
 
 nunjucks.configure("views", {
     express: server,
@@ -72,23 +22,65 @@ nunjucks.configure("views", {
 //e capturado o pedido do cliente
 server.get("/", function (req, res) {
 
-    const reversedIdeas = [...ideas].reverse();
-
-    let lastIdeias =[]
-    for(idea of reversedIdeas){
-        if(lastIdeias.length < 2){
-            lastIdeias.push(idea)
+    db.all(`SELECT * FROM ideias`, function (err, rows) {
+        if (err) {
+            console.log(err)
+            return res.send("FATAL ERROR")
         }
-    }
 
-    return res.render("index.html", {ideas: lastIdeias})
+
+        const reversedIdeas = [...rows].reverse();
+
+        let lastIdeias = []
+        for (idea of reversedIdeas) {
+            if (lastIdeias.length < 2) {
+                lastIdeias.push(idea)
+            }
+        }
+
+        return res.render("index.html", { ideas: lastIdeias })
+    })
+
 })
 
-
 server.get("/ideias", function (req, res) {
-    const reversedIdeas = [...ideas].reverse();
+    db.all(`SELECT * FROM ideias`, function (err, rows) {
+        if (err) {
+            console.log(err)
+            return res.send("FATAL ERROR")
+        }
+        const reversedIdeas = [...rows].reverse();
+        return res.render("ideias.html", { ideas: reversedIdeas })
+    })
+})
 
-    return res.render("ideias.html",{ideas: reversedIdeas})
+server.post("/", function (req, res) {
+    //INSERIR DADOS NA TABELA
+    const query = `
+        INSERT INTO ideias(
+            image,
+            title,
+            category,
+            description,
+            link
+        ) VALUES (?,?,?,?,?);
+    `
+    const values = [
+        req.body.image,
+        req.body.title,
+        req.body.category,
+        req.body.description,
+        req.body.link,
+    ]
+    //ASSIM QUE INSERE OS DADOS ELE MOSTRA SE DEU CERTO OU NÃO NO TERMINAL
+    db.run(query, values, function (err) {
+        if (err) {
+            console.log(err)
+            return res.send("FATAL ERROR")
+        }
+
+        return res.redirect("/ideias")
+    })
 })
 
 
